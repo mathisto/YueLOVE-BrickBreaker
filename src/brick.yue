@@ -1,0 +1,15 @@
+{ graphics: lg, keyboard: lk, audio: la } = love
+
+import "lib.lume" as L
+
+export class Brick
+  new: (x, y)=>
+    @pos = {x: 0,  y: 0}
+    @image = lg.newImage "assets/sprites/beveled-rectangle.png"
+    @hp = 1
+    @color = "blue"
+
+  -- update: (dt)=>
+
+  draw: (dt, iTime)=>
+    lg.draw(@image, @pos.x, @pos.y)

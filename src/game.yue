@@ -7,18 +7,32 @@
   window: lw } = love
 
 import "lib.lume" as L
+import "src.player"
+import "src.brick"
+import "src.ball"
 
 export class Game
   new: =>
-     @iTime = 0
-     @iResolution, _ = lw.getMode! -- Discard table, keep resolution
-     @bg = lg.newImage "assets/sprites/background.jpg"
+    @iTime = 0
+    @iResolution, _ = lw.getMode! -- Discard table, keep resolution
+    @player = player.Player!
+    @grid = {width: 18, height: 10}
+    @brick_width, @brick_height, @brick_gap = 98, 34, 2
+    @bricks = {}
+    for row = 1, @grid.width
+      for col = 1, @grid.height
+        @bricks[] = brick.Brick(row * @brick_width + @brick_gap, col * @brick_height + @brick_gap)
 
   update: (dt)=>
     @iTime += dt
+    @player\update(dt)
 
   draw: (dt, iTime)=>
-    lg.draw(@bg, 0, 0)
     lg.print("mouse_x: " .. lm.getX! .. " - mouse_y: " .. lm.getY!, 5, 5)
-    lg.print("Current FPS: " .. tostring(lt.getFPS!), 5, 45)
-    lg.print("Time Elapsed: " .. L.round(@iTime, 0.001), 5, 85)
+    lg.print("Current FPS: " .. tostring(lt.getFPS!), 5, 25)
+    lg.print("Time Elapsed: " .. L.round(@iTime, 0.001), 5, 45)
+
+    -- Draw the bricks
+    -- brick\draw! for brick in @bricks
+
+    @player\draw!

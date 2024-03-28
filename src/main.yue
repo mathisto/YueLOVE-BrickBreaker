@@ -7,8 +7,8 @@ import "src.game"
 love.load = ->
   lg.setColor L.color("#a9b1d6")
   lg.setBackgroundColor L.color("#1a1b26")
-  font_size = 40
-  global font = lg.newFont "assets/fonts/Mr.JunkerMSX2Mono.ttf", font_size
+  font_size = 20
+  global font = lg.newFont "assets/fonts/kenvector_future.ttf", font_size
   lg.setFont(font)
   global my_game = game.Game!
 

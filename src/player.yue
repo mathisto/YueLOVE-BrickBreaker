@@ -1,0 +1,21 @@
+{ graphics: lg,
+  keyboard: lk,
+  mouse: lm,
+  audio: la,
+  event: le,
+  timer: lt,
+  window: lw } = love
+
+import "lib.lume" as L
+
+export class Player
+  new: =>
+    @pos = 900
+    @speed = 10
+    @image = lg.newImage "assets/sprites/beveled-rectangle.png"
+
+  update: (dt)=>
+    @pos = lm.getX!
+
+  draw: (dt, iTime)=>
+    lg.draw(@image, @pos, 1000)
