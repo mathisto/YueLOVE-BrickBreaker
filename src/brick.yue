@@ -1,11 +1,11 @@
 { graphics: lg, keyboard: lk, audio: la, mouse: lm } = love
 
 import "lib.lume" as L
-import "src.shaders.color_shifter"
 
 export class Brick
   image = lg.newImage "assets/sprites/beveled-rectangle.png"
-  shader = color_shifter.shader
+  shader = lg.newShader io.open("src/shaders/color_shifter.glsl")\read("*a")
+
   new: (x, y)=>
     @pos = {x: x,  y: y}
     @x_color_shift, @y_color_shift = 0, 0
