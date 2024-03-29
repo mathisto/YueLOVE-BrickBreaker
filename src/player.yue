@@ -4,7 +4,7 @@ export class Player
   new: =>
     @pos = 900
     @speed = 10
-    @image = lg.newImage "assets/sprites/beveled-rectangle.png"
+    @image = lg.newImage "assets/sprites/paddle.png"
 
   update: (dt)=>
     @pos = lm.getX!
