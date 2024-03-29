@@ -1,7 +1,6 @@
 { graphics: lg, mouse: lm, timer: lt, window: lw } = love
 
 import "lib.lume" as L
-import "lib.flux" as Flux
 import "lib.breezefield" as Breeze
 import "src.player"
 import "src.brick"
@@ -24,7 +23,6 @@ export class Game
     @iTime += dt
     for brick in *@bricks do brick\update(dt, @iScreenWidth, @iScreenHeight)
     @player\update(dt)
-    Flux.update(dt)
 
   draw: (dt, iTime)=>
     lg.print("mouse_x: " .. lm.getX! .. " - mouse_y: " .. lm.getY!, 5, 5)
