@@ -1,12 +1,10 @@
 { graphics: lg } = love
 
 export class Ball
-  new: =>
-    @pos = { x: 900, y: 850 }
+  new: (x, y)=>
+    @pos = { x: x, y: y }
     @speed = 10
     @image = lg.newImage "assets/sprites/blue-ball.png"
 
-  -- update: (dt)=>
-
-  draw: (dt, iTime)=>
+  draw: =>
     lg.draw(@image, @pos.x, @pos.y)
