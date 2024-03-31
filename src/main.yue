@@ -1,16 +1,17 @@
-{ graphics: lg, math: lm, window: lw, event: le, audio: la } = love
+{ graphics: lg, math: lm, window: lw, event: le, audio: la, physics: lp } = love
 
 import "lib.lovebird" as Lovebird
 import "lib.lume" as L
 import "src.game"
 
+
 love.load = ->
+  global my_game = game.Game!
+  global font = lg.newFont "assets/fonts/kenvector_future_thin.ttf", font_size
+  font_size = 20
+  lg.setFont(font)
   lg.setColor L.color("#a9b1d6")
   lg.setBackgroundColor L.color("#1a1b26")
-  font_size = 20
-  global font = lg.newFont "assets/fonts/kenvector_future_thin.ttf", font_size
-  lg.setFont(font)
-  global my_game = game.Game!
 
 love.keypressed = (k, scan_code, is_repeat)->
   if k == 'q' then le.push 'quit'

@@ -1,10 +1,17 @@
-{ graphics: lg } = love
+{ graphics: lg, mouse: lm } = love
+
+import "lib.HC" as HC
 
 export class Ball
   new: (x, y)=>
     @pos = { x: x, y: y }
     @speed = 10
     @image = lg.newImage "assets/sprites/blue-ball.png"
+    @collider = HC.circle(@pos.x, @pos.y, lg.getWidth(@image))
+
+  update: (dt)=>
+    @pos.x, @pos.y = lm.getPosition!
+    @collider\moveTo(@pos.x, @pos.y)
 
   draw: =>
     lg.draw(@image, @pos.x, @pos.y)

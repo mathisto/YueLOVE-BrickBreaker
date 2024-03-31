@@ -1,25 +1,25 @@
 { graphics: lg, keyboard: lk, audio: la, mouse: lm } = love
 
 import "lib.lume" as L
+import "lib.HC" as HC
 
 export class Brick
-  image = lg.newImage "assets/sprites/beveled-rectangle.png"
   shader = lg.newShader io.open("src/shaders/color_shifter.glsl")\read("*a")
 
   new: (x, y)=>
     @pos = {x: x,  y: y}
     @x_color_shift, @y_color_shift = 0, 0
+    @image = lg.newImage "assets/sprites/beveled-rectangle.png"
+    @collider = HC.rectangle(@pos.x, @pos.y, lg.getWidth(@image), lg.getHeight(@image))
 
   update: (dt, iScreenWidth, iScreenHeight)=>
-    @x_color_shift = lm.getX! / iScreenWidth
-    @y_color_shift = lm.getY! / iScreenHeight
-    shader\send("color_shift", {@x_color_shift, @y_color_shift})
+    @x_color_shift = @pos.x / iScreenWidth
+    -- @x_color_shift = lm.getX! / iScreenWidth
+    @y_color_shift = @pos.y / iScreenHeight
+    -- @y_color_shift = lm.getY! / iScreenHeight
 
   draw: =>
     lg.setShader(shader)
-    lg.draw(image, @pos.x, @pos.y)
+    shader\send("color_shift", {@x_color_shift, @y_color_shift})
+    lg.draw(@image, @pos.x, @pos.y)
     lg.setShader!
-
-    lg.print("x_color_shift: " .. (L.round @x_color_shift, 0.01) ..
-             " - y_color_shift: " .. (L.round @y_color_shift, 0.01)
-             5, 1050)
