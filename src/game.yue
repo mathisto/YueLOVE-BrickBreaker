@@ -1,7 +1,8 @@
 { graphics: lg, mouse: lm, timer: lt, window: lw } = love
 
 import "lib.lume" as L
-import "lib.HC" as HC
+import "lib.bump"
+import "lib.lovebird"
 import "src.player"
 import "src.brick"
 import "src.ball"
@@ -10,15 +11,24 @@ export class Game
   new: =>
     @iTime = 0
     @iScreenWidth, @iScreenHeight = lw.getMode! -- Discard table, keep resolution
-    @player = player.Player!
-    @grid = {width: 18, height: 10}
-    @brick_width, @brick_height, @brick_gap = 98, 34, 2
+    @world = bump.newWorld(32) -- 32 is cell size
+    @player = player.Player(@world) -- Create player paddle
+
+    -- Create rows and columns of bricks
+    @brick_width, @brick_height, @brick_gap = 98, 34, 2 -- 98x34 pixels, 2 pixels gap
+    @grid = {width: 18, height: 10} -- 18 columns, 10 rows
     @bricks = {}
     for row = 1, @grid.width
       for col = 1, @grid.height
-        @bricks[] = brick.Brick(row * @brick_width + @brick_gap, col * @brick_height + @brick_gap)
-    @ball = ball.Ball(@iScreenWidth / 2 , @iScreenHeight - 150)
+        @bricks[] = brick.Brick(row * @brick_width + @brick_gap, col * @brick_height + @brick_gap, @world)
+    @ball = ball.Ball(@iScreenWidth / 2 , @iScreenHeight - 150, @world)
 
+    -- Add all entities to the world
+    @world\add(@player, @player.pos.x, @player.pos.y, @player.image_width, @player.image_height)
+    @world\add(@ball, @ball.pos.x, @ball.pos.y, @ball.image_width, @ball.image_height)
+    for i=1, #@bricks do
+      @world\add(@bricks[i], @bricks[i].pos.x, @bricks[i].pos.y,
+                 @bricks[i].image_width, @bricks[i].image_height)
 
   update: (dt)=>
     @iTime += dt
@@ -26,16 +36,10 @@ export class Game
     @player\update(dt)
     @ball\update(dt)
 
-    -- collisions = for shape, delta in pairs(HC.collisions(@ball.collider))
-    --   shape\move(delta.x, delta.y)
-    --   lg.print(shape.name .. " - " .. delta.x .. " - " .. delta.y, 5, 600)
-
-
   draw: (dt, iTime)=>
     lg.print("mouse_x: " .. lm.getX! .. " - mouse_y: " .. lm.getY!, 5, 5)
     lg.print("Current FPS: " .. tostring(lt.getFPS!), 750, 5)
     lg.print("Time Elapsed: " .. L.round(@iTime, 0.001), 1450, 5)
-
 
     @ball\draw!
     for brick in *@bricks do brick\draw!

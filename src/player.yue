@@ -1,13 +1,13 @@
 { graphics: lg, mouse: lm } = love
 
-import "lib.HC" as HC
+import "lib.bump"
 
 export class Player
-  new: =>
+  new: (world)=>
     @pos = {x: 900, y: 1000}
     @speed = 10
     @image = lg.newImage "assets/sprites/paddle.png"
-    @collider = HC.rectangle(@pos.x, @pos.y, lg.getWidth(@image), lg.getHeight(@image))
+    @image_width, @image_height = lg.getWidth(@image), lg.getHeight(@image)
 
   update: (dt)=>
     @pos.x = lm.getX!

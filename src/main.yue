@@ -12,6 +12,7 @@ love.load = ->
   lg.setFont(font)
   lg.setColor L.color("#a9b1d6")
   lg.setBackgroundColor L.color("#1a1b26")
+  love.mouse.setVisible(false)
 
 love.keypressed = (k, scan_code, is_repeat)->
   if k == 'q' then le.push 'quit'
