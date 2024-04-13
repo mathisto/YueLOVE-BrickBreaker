@@ -38,15 +38,17 @@ export class Game
     @player\update(dt)
     @ball\update(dt)
 
+  remove_bricks: (brick)=>
+    L.remove(@bricks, brick)
+    @world\remove(brick)
+
   mousepressed: (x, y, button)=>
+    -- Delete bricks with left mouse button
     if button == 1
-      item_clicked = @world\queryPoint(x, y)[1]
+      item_clicked = @world\queryPoint(x, y)[1] -- Get brick at clicked position
       return unless item_clicked
       yue.p item_clicked
-      -- Delete bricks with left mouse button
-      -- item_clicked\kill!
-      L.remove(@bricks, item_clicked)
-      @world\remove(item_clicked)
+      @remove_bricks(item_clicked)
 
   draw: (dt, iTime)=>
     lg.print("mouse_x: " .. lm.getX! .. " - mouse_y: " .. lm.getY!, 5, 5)
