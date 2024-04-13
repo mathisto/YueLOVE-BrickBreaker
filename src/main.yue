@@ -4,7 +4,6 @@ import "lib.lovebird" as Lovebird
 import "lib.lume" as L
 import "src.game"
 
-
 love.load = ->
   global my_game = game.Game!
   global font = lg.newFont "assets/fonts/kenvector_future_thin.ttf", font_size
@@ -12,11 +11,14 @@ love.load = ->
   lg.setFont(font)
   lg.setColor L.color("#a9b1d6")
   lg.setBackgroundColor L.color("#1a1b26")
-  love.mouse.setVisible(false)
+  -- love.mouse.setVisible(false)
 
 love.keypressed = (k, scan_code, is_repeat)->
   if k == 'q' then le.push 'quit'
   if k == 'r' then le.quit 'restart'
+
+love.mousepressed = (x, y, button)->
+  my_game\mousepressed(x, y, button)
 
 love.update = (dt)->
   my_game\update(dt)
