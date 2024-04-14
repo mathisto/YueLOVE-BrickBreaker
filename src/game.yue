@@ -36,7 +36,23 @@ export class Game
     @iTime += dt
     for brick in *@bricks do brick\update(dt, @iScreenWidth, @iScreenHeight)
     @player\update(dt)
+    @move_ball(dt)
     @ball\update(dt)
+
+  ballFilter: (item, other)=>
+    return 'bounce'
+
+  move_ball: (dt)=>
+    -- yue.p @ball
+    goal_x, goal_y = @ball.pos.x + @ball.velocity.x * dt, @ball.pos.y + @ball.velocity.y * dt
+    actual_x, actual_y, cols, len = @world\move(@ball, goal_x, goal_y, @ballFilter)
+    @ball.pos.x, @ball.pos.y = actual_x, actual_y
+    for i=1, len do
+      col = cols[i]
+      yue.p col.other
+      if col.other.id
+        @remove_bricks(col.other)
+        @ball.velocity.y = -@ball.velocity.y
 
   remove_bricks: (brick)=>
     L.remove(@bricks, brick)

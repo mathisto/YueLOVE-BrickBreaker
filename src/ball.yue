@@ -7,10 +7,11 @@ export class Ball
     @pos = { x: x, y: y }
     @speed = 10
     @image = lg.newImage "assets/sprites/blue-ball.png"
-    @image_width, @image_height = lg.getWidth(@image), lg.getHeight(@image)
+    @image_width, @image_height = @image\getWidth!, @image\getHeight!
+    @velocity = { x: 100, y: -100 }
 
   update: (dt)=>
-    @pos.x, @pos.y = 800, 950
+    return true
 
   draw: =>
     lg.draw(@image, @pos.x, @pos.y)
