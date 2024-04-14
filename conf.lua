@@ -3,7 +3,7 @@ function love.conf(t)
     require("yue")
     t.console = true
     t.window.title = "YueLOVE"
-    t.window.borderless = true
+    t.window.borderless = false
     t.window.resizable = true
     t.window.width = 1920
     t.window.height = 1080

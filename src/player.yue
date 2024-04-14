@@ -3,14 +3,16 @@
 import "lib.bump"
 
 export class Player
-  new: (world)=>
+  new: =>
+    @isPlayer = true
     @pos = {x: 900, y: 1000}
     @speed = 10
     @image = lg.newImage "assets/sprites/paddle.png"
-    @image_width, @image_height = lg.getWidth(@image), lg.getHeight(@image)
+    @image_width, @image_height = @image\getWidth!, @image\getHeight!
 
-  update: (dt)=>
+  update: (world, dt)=>
     @pos.x = lm.getX!
+    world\update(@, @pos.x, @pos.y, @image_width, @image_height)
 
   draw: =>
     lg.draw(@image, @pos.x, @pos.y)

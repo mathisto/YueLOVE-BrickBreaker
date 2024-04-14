@@ -12,7 +12,7 @@ export class Game
     @iTime = 0
     @iScreenWidth, @iScreenHeight = lw.getMode! -- Discard table, keep resolution
     @world = bump.newWorld(16) -- 32 is cell size
-    @player = player.Player(@world) -- Create player paddle
+    @player = player.Player! -- Create player paddle
 
     -- Create rows and columns of bricks
     @brick_width, @brick_height, @brick_gap = 98, 34, 2 -- 98x34 pixels, 2 pixels gap
@@ -28,14 +28,20 @@ export class Game
     -- Add all entities to the world
     @world\add(@player, @player.pos.x, @player.pos.y, @player.image_width, @player.image_height)
     @world\add(@ball, @ball.pos.x, @ball.pos.y, @ball.image_width, @ball.image_height)
+    -- Add walls and ceiling static entities to the world
+    @world\add({id: 'ceiling', x: 0, y: 0, w: @iScreenWidth, h: 1}, 0, 0, @iScreenWidth, 1) -- Ceiling
+    @world\add({id: 'wall', x: 0, y: 0, w: 1, h: @iScreenHeight}, 0, 0, 1, @iScreenHeight) -- Left wall
+    @world\add({id: 'wall', x: @iScreenWidth, y: 0, w: 1, h: @iScreenHeight}, @iScreenWidth, 0, 1, @iScreenHeight) -- Right wall
+
     for i=1, #@bricks do
       @world\add(@bricks[i], @bricks[i].pos.x, @bricks[i].pos.y,
                  @bricks[i].image_width, @bricks[i].image_height)
 
+
   update: (dt)=>
     @iTime += dt
     for brick in *@bricks do brick\update(dt, @iScreenWidth, @iScreenHeight)
-    @player\update(dt)
+    @player\update(@world, dt)
     @move_ball(dt)
     @ball\update(dt)
 
@@ -43,15 +49,20 @@ export class Game
     return 'bounce'
 
   move_ball: (dt)=>
-    -- yue.p @ball
     goal_x, goal_y = @ball.pos.x + @ball.velocity.x * dt, @ball.pos.y + @ball.velocity.y * dt
     actual_x, actual_y, cols, len = @world\move(@ball, goal_x, goal_y, @ballFilter)
     @ball.pos.x, @ball.pos.y = actual_x, actual_y
     for i=1, len do
       col = cols[i]
-      yue.p col.other
-      if col.other.id
+      yue.p col.other -- DEBUG
+      if col.other.isBrick
         @remove_bricks(col.other)
+        @ball.velocity.y = -@ball.velocity.y
+      elseif col.other.id == 'ceiling'
+        @ball.velocity.y = -@ball.velocity.y
+      elseif col.other.id == 'wall'
+        @ball.velocity.x = -@ball.velocity.x
+      elseif col.other.isPlayer
         @ball.velocity.y = -@ball.velocity.y
 
   remove_bricks: (brick)=>
@@ -63,7 +74,7 @@ export class Game
     if button == 1
       item_clicked = @world\queryPoint(x, y)[1] -- Get brick at clicked position
       return unless item_clicked
-      yue.p item_clicked
+      yue.p item_clicked -- DEBUG
       @remove_bricks(item_clicked)
 
   draw: (dt, iTime)=>

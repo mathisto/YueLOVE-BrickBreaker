@@ -7,6 +7,7 @@ export class Brick
   shader = lg.newShader io.open("src/shaders/color_shifter.glsl")\read("*a")
 
   new: (x, y, world, id)=>
+    @isBrick = true
     @pos = {x: x,  y: y}
     @id = id
     @x_color_shift, @y_color_shift = 0, 0

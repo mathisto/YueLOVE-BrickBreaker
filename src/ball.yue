@@ -4,11 +4,12 @@ import "lib.bump"
 
 export class Ball
   new: (x, y, world)=>
+    @isBall = true
     @pos = { x: x, y: y }
     @speed = 10
     @image = lg.newImage "assets/sprites/blue-ball.png"
     @image_width, @image_height = @image\getWidth!, @image\getHeight!
-    @velocity = { x: 100, y: -100 }
+    @velocity = { x: 400, y: -400 }
 
   update: (dt)=>
     return true
